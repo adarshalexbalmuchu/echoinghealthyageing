@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">    <title>Echoing Healthy Ageing: Interactive Strategy</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #fdfaf7;
+            color: #3f3c3a;
+        }
+        .nav-link {
+            transition: color 0.3s, border-bottom-color 0.3s;
+        }
+        .nav-link.active {
+            color: #c7923e;
+            border-bottom-color: #c7923e;
+        }
+        .persona-card.active {
+            box-shadow: 0 0 0 2px #c7923e;
+            transform: scale(1.05);
+        }
+        .strategy-tab.active {
+            background-color: #c7923e;
+            color: #ffffff;
+        }
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 500px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 350px;
+        }
+        @media (min-width: 768px) {
+            .chart-container {
+                height: 350px;
+                max-height: 400px;
+            }
+        }
+        .gemini-button:disabled {
+            background-color: #a0aec0;
+            cursor: not-allowed;
+        }
+        .prose {
+            max-width: none;
+        }
+        .prose ul {
+            list-style-type: disc;
+            padding-left: 1.5em;
+        }
+        .prose li {
+            margin-bottom: 0.5em;
+        }
+    </style>
+</head>
+<body class="antialiased">    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
+            <div class="text-2xl font-bold text-[#3f3c3a]">
+                <span class="text-[#c7923e]">Echoing</span> Healthy Ageing
+            </div>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#challenge" class="nav-link border-b-2 border-transparent pb-1">The Challenge</a>
+                <a href="#personas" class="nav-link border-b-2 border-transparent pb-1">Meet the Faces</a>
+                <a href="#strategy" class="nav-link border-b-2 border-transparent pb-1">Our Strategy</a>
+                <a href="#roadmap" class="nav-link border-b-2 border-transparent pb-1">Action Roadmap</a>
+            </div>
+            <button id="mobile-menu-button" class="md:hidden p-2">
+                <span class="sr-only">Open menu</span>
+                <div class="w-6 h-6 flex flex-col justify-center items-center">
+                    <span class="bg-current block h-0.5 w-6 mb-1"></span>
+                    <span class="bg-current block h-0.5 w-6 mb-1"></span>
+                    <span class="bg-current block h-0.5 w-6"></span>
+                </div>
+            </button>
+        </nav>
+        <div id="mobile-menu" class="md:hidden hidden bg-white border-t border-gray-200">
+            <div class="px-6 py-4 space-y-2">
+                <a href="#challenge" class="block py-2 text-gray-600 hover:text-[#c7923e]">The Challenge</a>
+                <a href="#personas" class="block py-2 text-gray-600 hover:text-[#c7923e]">Meet the Faces</a>
+                <a href="#strategy" class="block py-2 text-gray-600 hover:text-[#c7923e]">Our Strategy</a>
+                <a href="#roadmap" class="block py-2 text-gray-600 hover:text-[#c7923e]">Action Roadmap</a>
+            </div>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-6 py-12">
+        <section id="hero" class="text-center mb-20">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">A Marketing Strategy for Dementia in India</h1>
+            <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">An interactive overview of the mission to increase awareness, early detection, and compassionate care for India’s ageing population.</p>
+        </section>
+
+        <section id="challenge" class="py-16 bg-white rounded-2xl shadow-lg mb-20">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold mb-2">The Dementia Challenge in India</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">India faces a significant and growing dementia crisis, marked by high prevalence, a vast treatment gap, and unique socio-economic factors. This section provides a high-level overview of the key data points that underscore the urgency of our mission.</p>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center px-4">
+                <div class="space-y-8">
+                    <div class="bg-[#fdfaf7] p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold mb-2 text-center">Population at Risk</h3>
+                        <p class="text-6xl font-bold text-center text-[#c7923e]">8.8M</p>
+                        <p class="text-center text-gray-600 mt-2">Indians over 60 estimated to be living with dementia.</p>
+                    </div>
+                     <div class="bg-[#fdfaf7] p-6 rounded-xl">
+                        <h3 class="text-xl font-semibold mb-2 text-center">The Treatment Gap</h3>
+                        <div class="chart-container h-48 max-h-48 mx-auto">
+                            <canvas id="treatmentGapChart"></canvas>
+                        </div>
+                        <p class="text-center text-gray-600 mt-4">This chart starkly illustrates the immense gap between the number of individuals living with dementia and those who receive a formal diagnosis or care.</p>
+                    </div>
+                </div>
+                <div>
+                    <div class="bg-[#fdfaf7] p-6 rounded-xl mb-8">
+                        <h3 class="text-xl font-semibold mb-4 text-center">Prevalence Disparities</h3>
+                        <div class="chart-container h-64 max-h-64">
+                            <canvas id="prevalenceChart"></canvas>
+                        </div>
+                        <p class="text-center text-gray-600 mt-4">Dementia prevalence is not uniform. It is significantly higher in rural areas and among females, often linked to lower educational attainment. This highlights the need for targeted and gender-sensitive outreach.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="personas" class="py-16 mb-20">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold mb-2">Meet the Faces of Our Campaign</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">To connect authentically, we've developed detailed personas representing our key audiences. Understanding their unique demographics, motivations, and barriers is fundamental to our strategy. Click on a persona to learn more and get AI-powered insights.</p>
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div id="persona-display-container" class="md:col-span-2 lg:col-span-3 bg-white p-8 rounded-2xl shadow-lg transition-all duration-500 min-h-[400px]">
+                    <div id="persona-details">
+                        </div>
+                    <div id="gemini-advice-section" class="mt-6 pt-6 border-t border-gray-200">
+                        <h4 class="text-xl font-semibold mb-4 text-center text-[#3f3c3a]">✨ AI-Powered Insights & Advice</h4>
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center mb-4">
+                            <button id="tailoredAdviceBtn" class="gemini-button bg-[#c7923e] text-white px-6 py-3 rounded-lg hover:bg-[#b38032] transition duration-150 disabled:opacity-50 text-sm font-medium">Get Tailored Advice for This Persona</button>
+                            <button id="caregiverSupportBtn" class="gemini-button bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-150 disabled:opacity-50 text-sm font-medium" style="display:none;">Get General Caregiver Support Ideas</button>
+                        </div>
+                        <div id="gemini-advice-content" class="bg-[#fefcf9] p-6 rounded-lg min-h-[150px] text-gray-700 border border-gray-200 shadow-inner prose">
+                            <p class="text-center text-gray-500">Click a button above to get AI-powered suggestions.</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-5 gap-4 md:col-span-2 lg:col-span-3">
+                </div>
+            </div>
+        </section>
+        
+        <section id="strategy" class="py-16 bg-white rounded-2xl shadow-lg mb-20">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold mb-2">Our Strategic Pillars</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">Our strategy is a multi-pronged approach designed to tackle the dementia challenge from all angles. It integrates culturally resonant messaging, a diverse mix of communication channels, and powerful partnerships to create systemic change. Explore each pillar to understand our plan.</p>
+            </div>
+            <div class="px-4">
+                <div class="flex flex-wrap justify-center gap-2 mb-8 border-b border-gray-200">
+                    <button class="strategy-tab px-4 py-2 rounded-t-lg text-sm md:text-base font-medium" data-tab="messaging">Messaging</button>
+                    <button class="strategy-tab px-4 py-2 rounded-t-lg text-sm md:text-base font-medium" data-tab="channels">Channels</button>
+                    <button class="strategy-tab px-4 py-2 rounded-t-lg text-sm md:text-base font-medium" data-tab="partnerships">Partnerships & Advocacy</button>
+                </div>
+                <div id="strategy-content" class="transition-all duration-500">
+                </div>
+            </div>
+        </section>
+
+        <section id="roadmap" class="py-16">
+            <div class="text-center mb-12 px-4">
+                <h2 class="text-3xl font-bold mb-2">3-Month Action Roadmap</h2>
+                <p class="text-gray-600 max-w-3xl mx-auto">This roadmap outlines the key activities for the initial phase of the campaign, focusing on building a strong foundation, launching pilot programs, and gathering data to inform our ongoing efforts for greater impact.</p>
+            </div>
+            <div class="relative px-4">
+                <div class="absolute h-full border-l-2 border-dashed border-[#c7923e] left-1/2 -translate-x-1/2 md:left-4"></div>
+                <div class="space-y-12">
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="bg-gray-800 text-white mt-20">
+        <div class="container mx-auto px-6 py-8 text-center">
+            <p class="font-bold text-lg"><span class="text-[#c7923e]">Echoing</span> Healthy Ageing</p>
+            <p class="text-sm text-gray-400 mt-2">A campaign for a dementia-aware and compassionate India.</p>
+        </div>
+    </footer>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    let currentPersonaKey = null;
+
+    const personas = {
+        indira: {
+            name: "Independent Indira",
+            role: "Urban Elderly",
+            image: "👵",
+            description: "A retired teacher in a metro city, Indira is literate, tech-savvy, and values her independence. While health-conscious, she might dismiss early memory lapses as 'just getting older.'",
+            barriers: "Normalization of symptoms, fear of diagnosis, online information overload.",
+            levers: "Digital content on brain health, clear differentiation between normal aging and dementia, info on local memory clinics."
+        },
+        ramappa: {
+            name: "Respectful Ramappa",
+            role: "Rural Elderly",
+            image: "👴",
+            description: "A marginal farmer with low literacy, Ramappa relies on family and tradition. His understanding of health is intertwined with local beliefs, and he deeply trusts community leaders and ASHA workers.",
+            barriers: "Low literacy, deep-rooted myths/stigma, lack of access to services, fatalistic attitudes.",
+            levers: "Simple, oral/visual communication via trusted locals (ASHAs), radio programs, village health camps."
+        },
+        deepa: {
+            name: "Devoted Deepa",
+            role: "Family Caregiver",
+            image: "👩‍⚕️",
+            description: "A middle-aged daughter-in-law, Deepa is stressed, isolated, and overwhelmed by caring for her father-in-law. She is motivated by duty but feels ill-equipped and desperately seeks practical advice.",
+            barriers: "Emotional exhaustion, lack of time, financial stress, difficulty finding reliable information.",
+            levers: "Empathetic messaging, practical advice on daily care, local support services, peer support platforms."
+        },
+        chandan: {
+            name: "Curious Chandan",
+            role: "General Public",
+            image: "🧑",
+            description: "A young, digitally-savvy urban professional. Chandan is empathetic to social causes but lacks specific knowledge about dementia, making him susceptible to myths but also a potential advocate.",
+            barriers: "Low personal relevance, subject complexity, potential for spreading misinformation.",
+            levers: "Engaging & shareable social media content (videos, infographics), simple calls-to-action (be a dementia friend)."
+        },
+        priya: {
+            name: "Dr. Priya",
+            role: "Primary Care Physician",
+            image: "🩺",
+            description: "A GP in a busy semi-urban PHC, Dr. Priya is dedicated but overwhelmed. Her formal training on dementia was minimal, and she lacks time for detailed cognitive assessments.",
+            barriers: "Heavy workload, lack of training, absence of clear referral pathways, perceived lack of treatments.",
+            levers: "Concise info on early signs, training on quick screening tools (GPCOG), local referral options."
+        }
+    };
+
+    const strategyContent = {
+        messaging: {
+            title: "Crafting Culturally Resonant & Empathetic Messaging",
+            points: [
+                { icon: "💬", title: "Core Narratives", text: "Built around key themes: Dementia is a medical condition, not normal aging; Early detection improves quality of life; Caregivers are not alone; A dementia-friendly India is everyone's responsibility." },
+                { icon: "🔬", title: "A/B Testing for Resonance", text: "Systematically test different messaging styles (emotional, fact-based, story-led) across digital channels to determine what resonates most with specific audience segments." },
+                { icon: "🎬", title: "Prioritized Content Formats", text: "Focus on high-impact formats like short videos for social media, testimonials, infographics for simplifying data, and pictorial guides for low-literacy populations." },
+                { icon: "🌐", title: "Language & Tradition", text: "All materials will be culturally adapted into major regional languages. We will also leverage traditional storytelling forms like folk art and street theatre (Nukkad Nataks) for grassroots outreach." }
+            ]
+        },
+        channels: {
+            title: "Integrated Multi-Channel Communication",
+            points: [
+                { icon: "📻", title: "Offline Engagement", text: "Utilize trusted, high-reach channels like All India Radio, community events, health camps at PHCs, and frontline ASHA workers to engage directly with communities, especially in rural areas." },
+                { icon: "📱", title: "Online Amplification", text: "Build a digital ecosystem using WhatsApp for direct messaging, YouTube for educational videos, and other social media for targeted campaigns. A central, SEO-optimized website will be the information hub." },
+                { icon: "🎯", title: "Influencer Marketing", text: "Collaborate with credible national and regional influencers, including health professionals and vernacular content creators, to amplify our message and build trust." },
+                { icon: "🤝", title: "Differentiated Approach", text: "The channel mix will be tailored to each persona. For example, 'Respectful Ramappa' will be reached via radio and ASHAs, while 'Independent Indira' will be engaged through online health portals and WhatsApp." }
+            ]
+        },
+        partnerships: {
+            title: "Partnerships & Advocacy for Systemic Change",
+            points: [
+                { icon: "🏛️", title: "Government Collaboration", text: "Align with national programs like NPHCE and DMHP, and partner with Ministries (MoHFW, MoSJE) to integrate dementia care into existing healthcare structures." },
+                { icon: "❤️", title: "NGO & Civil Society Alliances", text: "Work closely with leading NGOs like ARDSI, DIA, and HelpAge India to leverage their expertise, networks, and service delivery capabilities for grassroots action and support." },
+                { icon: "🎓", title: "Academic & Healthcare Institutions", text: "Partner with medical colleges and hospitals (like NIMHANS) to improve professional training, conduct research, and establish clear referral pathways for diagnosis and management." },
+                { icon: "📢", title: "Targeted Advocacy", text: "Develop clear policy asks, supported by data (like LASI), to advocate for a National Dementia Strategy, increased funding, and supportive policies for family caregivers." }
+            ]
+        }
+    };
+    
+    const roadmap = [
+        { month: "Month 1: Foundation & Preparation", icon: "🌱", tasks: ["Finalize campaign branding and core messaging pillars.", "Establish website and social media presence.", "Forge formal partnerships with key national NGOs (ARDSI, DIA).", "Initiate planning for qualitative research and baseline surveys."] },
+        { month: "Month 2: Pilot Implementation & Engagement", icon: "🚀", tasks: ["Official launch of digital channels with initial content.", "Commence qualitative research and baseline data collection in pilot sites.", "Launch national dementia helpline in collaboration with partners.", "Conduct first orientation webinar for primary care physicians."] },
+        { month: "Month 3: Community Pilots & Advocacy", icon: "🌍", tasks: ["Conduct pilot community awareness events and screening camps.", "Refine all IEC materials based on feedback from pre-testing.", "Launch first A/B tests for online advertising campaigns.", "Begin dissemination of policy briefs to select policymakers."] }
+    ];
+
+    const personaGridContainer = document.querySelector('#personas .grid-cols-2.sm\\:grid-cols-3');
+    const personaDetailsDisplay = document.getElementById('persona-details');
+    const caregiverSupportBtn = document.getElementById('caregiverSupportBtn');
+    const tailoredAdviceBtn = document.getElementById('tailoredAdviceBtn');
+    const geminiAdviceContent = document.getElementById('gemini-advice-content');
+
+    Object.keys(personas).forEach(key => {
+        const persona = personas[key];
+        const card = document.createElement('div');
+        card.className = 'persona-card bg-white p-4 rounded-xl shadow-md cursor-pointer transition-all duration-300 hover:shadow-lg hover:-translate-y-1';
+        card.dataset.persona = key;
+        card.innerHTML = `
+            <div class="text-4xl text-center mb-2">${persona.image}</div>
+            <h4 class="font-semibold text-center">${persona.name}</h4>
+            <p class="text-sm text-gray-500 text-center">${persona.role}</p>
+        `;
+        personaGridContainer.appendChild(card);
+    });
+
+    function updatePersonaDisplay(key) {
+        currentPersonaKey = key;
+        const persona = personas[key];
+        document.querySelectorAll('.persona-card').forEach(c => c.classList.remove('active'));
+        document.querySelector(`.persona-card[data-persona="${key}"]`).classList.add('active');
+        
+        personaDetailsDisplay.innerHTML = `
+            <div class="flex flex-col md:flex-row items-center gap-8">
+                <div class="text-8xl flex-shrink-0">${persona.image}</div>
+                <div>
+                    <h3 class="text-2xl font-bold mb-1">${persona.name} <span class="text-lg font-medium text-gray-500">(${persona.role})</span></h3>
+                    <p class="text-gray-600 mb-4">${persona.description}</p>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="bg-[#fdfaf7] p-4 rounded-lg border border-gray-200">
+                            <h5 class="font-semibold mb-1">Key Barriers</h5>
+                            <p class="text-sm text-gray-600">${persona.barriers}</p>
+                        </div>
+                        <div class="bg-[#fdfaf7] p-4 rounded-lg border border-gray-200">
+                            <h5 class="font-semibold mb-1">Campaign Levers</h5>
+                            <p class="text-sm text-gray-600">${persona.levers}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        `;
+        geminiAdviceContent.innerHTML = '<p class="text-center text-gray-500">Click a button above to get AI-powered suggestions.</p>';
+        if (key === 'deepa') {
+            caregiverSupportBtn.style.display = 'inline-block';
+        } else {
+            caregiverSupportBtn.style.display = 'none';
+        }
+    }
+    
+    personaGridContainer.addEventListener('click', (e) => {
+        const card = e.target.closest('.persona-card');
+        if (card) {
+            updatePersonaDisplay(card.dataset.persona);
+        }
+    });
+
+    updatePersonaDisplay('deepa');
+      // Gemini AI Configuration
+    const GEMINI_API_KEY = 'AIzaSyBw9qrYlJdEO0peXFwBdJie-k7bGtsUGok';
+      async function callGeminiAPI(prompt, buttonToDisable) {
+        const geminiAdviceContent = document.getElementById('gemini-advice-content');
+        const allGeminiButtons = document.querySelectorAll('.gemini-button');
+        
+        // Show loading state
+        geminiAdviceContent.innerHTML = '<div class="text-center text-gray-500 py-10"><div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-[#c7923e]"></div><p class="mt-4">Generating insights...</p></div>';
+        allGeminiButtons.forEach(btn => btn.disabled = true);
+
+        try {
+            // Check if API key is available
+            if (GEMINI_API_KEY && GEMINI_API_KEY.trim() !== '') {
+                // Make actual API call to Gemini
+                const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${GEMINI_API_KEY}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        contents: [{
+                            parts: [{
+                                text: prompt
+                            }]
+                        }]
+                    })
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    const aiContent = data.candidates[0].content.parts[0].text;
+                    
+                    // Format the AI response
+                    const formattedContent = `
+                        <div class="prose">
+                            <div class="flex items-center gap-2 mb-4">
+                                <span class="text-2xl">🤖</span>
+                                <h4 class="text-lg font-semibold text-[#c7923e] mb-0">AI-Generated Insights</h4>
+                            </div>
+                            <div class="text-gray-700">${aiContent.replace(/\n/g, '<br>')}</div>
+                        </div>
+                    `;
+                    
+                    geminiAdviceContent.innerHTML = formattedContent;
+                } else {
+                    throw new Error('API request failed');
+                }
+            } else {
+                // Use fallback content when no API key is provided
+                throw new Error('No API key configured');
+            }
+        } catch (error) {
+            console.log('Using fallback content:', error.message);
+            
+            // Display fallback content
+            let fallbackContent = '';
+            
+            if (currentPersonaKey === 'deepa') {
+                fallbackContent = `
+                    <div class="prose">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-2xl">💡</span>
+                            <h4 class="text-lg font-semibold text-[#c7923e] mb-0">Support for Family Caregivers</h4>
+                        </div>
+                        <ul>
+                            <li>Connect with local caregiver support groups and ASHA workers</li>
+                            <li>Practice stress management techniques like meditation and yoga</li>
+                            <li>Seek respite care options through community health centers</li>
+                            <li>Join online forums for emotional support and practical tips</li>
+                            <li>Consult with healthcare providers for care planning guidance</li>
+                        </ul>
+                        <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 text-sm">
+                            <p class="text-blue-700 mb-0">💡 <strong>Tip:</strong> Add a Gemini API key to get personalized AI insights!</p>
+                        </div>
+                    </div>
+                `;
+            } else {
+                const personaName = personas[currentPersonaKey]?.name || 'this persona';
+                fallbackContent = `
+                    <div class="prose">
+                        <div class="flex items-center gap-2 mb-4">
+                            <span class="text-2xl">💡</span>
+                            <h4 class="text-lg font-semibold text-[#c7923e] mb-0">Advice for ${personaName}</h4>
+                        </div>
+                        <ul>
+                            <li>Early detection through regular health check-ups is crucial</li>
+                            <li>Stay informed about dementia symptoms and warning signs</li>
+                            <li>Maintain an active lifestyle with physical and mental exercises</li>
+                            <li>Build strong social connections and community support</li>
+                            <li>Consult healthcare professionals for proper guidance</li>
+                        </ul>
+                        <div class="mt-4 p-3 bg-blue-50 border-l-4 border-blue-400 text-sm">
+                            <p class="text-blue-700 mb-0">💡 <strong>Tip:</strong> Add a Gemini API key to get personalized AI insights!</p>
+                        </div>
+                    </div>
+                `;
+            }
+            
+            geminiAdviceContent.innerHTML = fallbackContent;
+        } finally {
+            // Re-enable buttons
+            allGeminiButtons.forEach(btn => btn.disabled = false);
+        }
+    }
+
+    tailoredAdviceBtn.addEventListener('click', () => {
+        if (currentPersonaKey) {
+            const persona = personas[currentPersonaKey];
+            const prompt = `You are an empathetic AI assistant for 'Echoing Healthy Ageing', a dementia awareness campaign in India. For the persona named ${persona.name} (${persona.role}), who is described as: '${persona.description}'. Key challenges they face (barriers): '${persona.barriers}'. Factors that can help reach them (levers): '${persona.levers}'. Please provide 3 concise, actionable, and culturally sensitive pieces of advice or resources tailored to this specific individual. Present the advice in a bulleted list. Ensure the tone is supportive and practical for the Indian context.`;
+            callGeminiAPI(prompt, tailoredAdviceBtn);
+        }
+    });
+
+    caregiverSupportBtn.addEventListener('click', () => {
+        const prompt = `You are an empathetic AI assistant for 'Echoing Healthy Ageing', a dementia awareness campaign in India. Provide 5 practical and compassionate support ideas or stress management techniques for family caregivers looking after someone with dementia in India. Consider emotional, practical, and social support aspects. Present the ideas in a bulleted list. Ensure the tone is supportive and practical for the Indian context.`;
+        callGeminiAPI(prompt, caregiverSupportBtn);
+    });
+
+
+    const strategyTabs = document.querySelectorAll('.strategy-tab');
+    const strategyContentEl = document.getElementById('strategy-content');
+
+    function updateStrategyContent(tab) {
+        const content = strategyContent[tab];
+        strategyTabs.forEach(t => t.classList.remove('active'));
+        document.querySelector(`.strategy-tab[data-tab="${tab}"]`).classList.add('active');
+
+        strategyContentEl.innerHTML = `
+            <h3 class="text-2xl font-bold mb-6 text-center">${content.title}</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                ${content.points.map(point => `
+                    <div class="bg-[#fdfaf7] p-6 rounded-xl flex items-start space-x-4 border border-gray-200">
+                        <div class="text-3xl flex-shrink-0 pt-1">${point.icon}</div>
+                        <div>
+                            <h4 class="font-semibold text-lg mb-1">${point.title}</h4>
+                            <p class="text-gray-600 text-sm">${point.text}</p>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+        `;
+    }
+
+    strategyTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            updateStrategyContent(tab.dataset.tab);
+        });
+    });
+
+    updateStrategyContent('messaging');
+
+    const roadmapContainer = document.querySelector('#roadmap .space-y-12');
+    roadmap.forEach((item, index) => {
+        const isOdd = (index + 1) % 2 !== 0;
+        const div = document.createElement('div');
+        div.className = `relative flex items-center ${isOdd ? 'md:flex-row-reverse' : ''}`;
+        div.innerHTML = `
+            <div class="hidden md:block w-1/2"></div>
+            <div class="hidden md:flex justify-center w-8 absolute left-1/2 -translate-x-1/2">
+                <div class="h-8 w-8 rounded-full bg-[#c7923e] text-white flex items-center justify-center text-xl shadow-lg">
+                    ${item.icon}
+                </div>
+            </div>
+            <div class="w-full md:w-1/2 bg-white p-6 rounded-2xl shadow-lg">
+                <h4 class="font-bold text-xl mb-3 text-[#c7923e]">${item.month}</h4>
+                <ul class="list-disc list-inside space-y-2 text-gray-600 text-sm">
+                    ${item.tasks.map(task => `<li>${task}</li>`).join('')}
+                </ul>
+            </div>
+        `;
+        roadmapContainer.appendChild(div);
+    });
+    
+    const prevalenceCtx = document.getElementById('prevalenceChart').getContext('2d');
+    new Chart(prevalenceCtx, {
+        type: 'bar',
+        data: {
+            labels: ['Rural', 'Urban', 'Female', 'Male'],
+            datasets: [{
+                label: 'Dementia Prevalence (%)',
+                data: [8.4, 5.3, 9.0, 5.8],
+                backgroundColor: ['#e5b672', '#a47e3b', '#d9a45b', '#b9935a'],
+                borderColor: '#ffffff',
+                borderWidth: 2,
+                borderRadius: 5
+            }]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            indexAxis: 'y',
+            scales: { x: { beginAtZero: true, title: { display: true, text: 'Prevalence (%)' } } },
+            plugins: { legend: { display: false }, tooltip: { callbacks: { label: function(context) { return `${context.dataset.label}: ${context.raw}%`; } } } }
+        }
+    });
+
+    const gapCtx = document.getElementById('treatmentGapChart').getContext('2d');
+    new Chart(gapCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Diagnosed/Receiving Care', 'Undiagnosed/No Care'],
+            datasets: [{ data: [10, 90], backgroundColor: ['#c7923e', '#e0e0e0'], borderColor: '#fdfaf7', borderWidth: 4 }]
+        },
+        options: {
+            responsive: true, maintainAspectRatio: false, cutout: '70%',
+            plugins: { legend: { position: 'bottom', labels: { boxWidth: 15, padding: 15 } }, tooltip: { callbacks: { label: function(context) { return `${context.label}: ${context.raw}%`; } } }, title: { display: true, text: 'Only 1 in 10 Receive Care', position: 'top', font: {size: 14} } }
+        }
+    });
+
+    const sections = document.querySelectorAll('main section[id]');
+    const navLinks = document.querySelectorAll('.nav-link');
+    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.4 };
+    const observer = new IntersectionObserver((entries) => {
+        let activeSectionId = null;
+        entries.forEach(entry => {
+            if (entry.isIntersecting && entry.intersectionRatio >= 0.4) {
+                 activeSectionId = entry.target.id;
+            }
+        });
+         if (!activeSectionId && entries.length > 0) { // If no section is 40% visible, check if any is visible at all
+            const visibleEntry = entries.find(e => e.isIntersecting);
+            if(visibleEntry) activeSectionId = visibleEntry.target.id;
+        }
+
+        navLinks.forEach(link => {
+            link.classList.remove('active');
+            if (activeSectionId && link.getAttribute('href').substring(1) === activeSectionId) {
+                link.classList.add('active');
+            }
+        });
+    }, observerOptions);
+    sections.forEach(section => observer.observe(section));
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetElement = document.querySelector(this.getAttribute('href'));
+            if(targetElement) {
+                targetElement.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    });
+
+    // Mobile menu functionality
+    const mobileMenuButton = document.getElementById('mobile-menu-button');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (mobileMenuButton && mobileMenu) {
+        mobileMenuButton.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+        
+        // Close mobile menu when clicking on links
+        mobileMenu.querySelectorAll('a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+    }
+
+});
+</script>
+
+</body>
+</html>
