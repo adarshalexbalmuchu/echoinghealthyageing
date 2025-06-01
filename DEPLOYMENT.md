@@ -27,7 +27,7 @@ git commit -m "Initial commit - Echoing Healthy Ageing interactive strategy"
 Copy the commands from GitHub's "push an existing repository" section, which will look like:
 
 ```powershell
-git remote add origin https://github.com/YOUR_USERNAME/echoinghealthyageing.git
+git remote add origin https://github.com/adarshalexbalmuchu/echoinghealthyageing.git
 git branch -M main
 git push -u origin main
 ```

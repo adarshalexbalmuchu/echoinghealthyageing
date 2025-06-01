@@ -52,11 +52,13 @@
         .prose ul {
             list-style-type: disc;
             padding-left: 1.5em;
-        }
-        .prose li {
+        }        .prose li {
             margin-bottom: 0.5em;
         }
     </style>
+    
+    <!-- Configuration file for API keys (optional) -->
+    <script src="config.js" onerror="console.log('No config.js file found - using fallback for API keys')"></script>
 </head>
 <body class="antialiased">    <header class="bg-white/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
         <nav class="container mx-auto px-6 py-4 flex justify-between items-center">
@@ -329,9 +331,9 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-    updatePersonaDisplay('deepa');
-      // Gemini AI Configuration
-    const GEMINI_API_KEY = 'AIzaSyBw9qrYlJdEO0peXFwBdJie-k7bGtsUGok';
+    updatePersonaDisplay('deepa');      // Gemini AI Configuration
+    // SECURITY: API key should be configured externally, not hardcoded
+    const GEMINI_API_KEY = window.GEMINI_API_KEY || process.env.GEMINI_API_KEY || '';
       async function callGeminiAPI(prompt, buttonToDisable) {
         const geminiAdviceContent = document.getElementById('gemini-advice-content');
         const allGeminiButtons = document.querySelectorAll('.gemini-button');

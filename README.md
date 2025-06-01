@@ -32,13 +32,27 @@ To enable the full AI-powered insights feature:
    - Create a new API key
    - Copy the key
 
-2. **Configure the API Key**:
-   - Open `index.html` in a text editor
-   - Find the line: `const GEMINI_API_KEY = '';`
-   - Replace with: `const GEMINI_API_KEY = 'YOUR_API_KEY_HERE';`
-   - Save the file
+2. **Configure the API Key Securely**:
+   
+   **Option A: Using config.js (Recommended for local development)**
+   ```bash
+   # Copy the example configuration file
+   cp config.example.js config.js
+   
+   # Edit config.js and add your API key
+   # The file is already in .gitignore so it won't be committed
+   ```
+   
+   **Option B: Using environment variables (For production)**
+   - Set `GEMINI_API_KEY` as an environment variable in your hosting service
+   - The application will automatically use it
 
-3. **Deploy** your changes to GitHub Pages
+   **⚠️ SECURITY WARNING**: Never commit API keys directly in your code! Always use:
+   - Configuration files that are gitignored
+   - Environment variables
+   - Secure secret management services
+
+3. **Deploy** your changes
 
 > **Note**: Without an API key, the application will show helpful fallback content instead of AI-generated insights.
 
